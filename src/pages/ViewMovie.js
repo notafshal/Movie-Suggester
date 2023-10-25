@@ -9,7 +9,7 @@ const ViewMovie = () => {
 
   useEffect(() => {
     getSingleMovieInfo();
-  });
+  }, []);
 
   const getSingleMovieInfo = async () => {
     try {
