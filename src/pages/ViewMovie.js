@@ -1,6 +1,8 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom/cjs/react-router-dom.min";
+import { Link, useParams } from "react-router-dom/cjs/react-router-dom.min";
+import MovieNab from "../components/MovieNab";
+import { Button, Card, Container } from "react-bootstrap";
 
 const ViewMovie = () => {
   const getParams = useParams();
@@ -23,27 +25,32 @@ const ViewMovie = () => {
   };
   return (
     <>
-      View Movie
-      <br />
-      <button onClick={getSingleMovieInfo}>View Movie Detail</button>
-      <br />
-      <br />
-      <h3>Movie Detail:</h3>
-      <br />
-      Movie Name: {movieData.name}
-      <br />
-      Info: {movieData.info}
-      <br />
-      Description :{movieData.desc}
-      <br /> Image:
-      <br />
-      <img
-        src={movieData.image}
-        alt="Movie Image"
-        style={{ height: "200px" }}
-      />
-      <br />
-      rating:{movieData.rating}
+      <MovieNab />
+      <Container>
+        <h1 className="text-info">{movieData.name}</h1> <br />
+        <br />
+        <Card className="px-5">
+          <Card.Body>
+            <img
+              src={movieData.image}
+              alt="Movie Image"
+              style={{ height: "200px", width: "200px" }}
+            />
+          </Card.Body>
+        </Card>
+        <Card>
+          <Card.Body>
+            {movieData.info}
+            {movieData.desc}
+            <br />
+            Rating: {movieData.rating}
+          </Card.Body>
+        </Card>{" "}
+        <br />
+        <Link to="/">
+          <Button className="bg-dark text-light">Home</Button>
+        </Link>
+      </Container>
     </>
   );
 };

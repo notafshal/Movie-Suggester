@@ -1,6 +1,9 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
+import MovieNab from "../components/MovieNab";
+import SingleMovie from "../components/SingleMovie";
+import { Container, Form, Row, Spinner } from "react-bootstrap";
 
 const Index = () => {
   const [movies, setMovies] = useState([]);
@@ -62,26 +65,23 @@ const Index = () => {
   };
   return (
     <div className="App">
-      <div>
-        <Link to="/add">Add Movie</Link>
-        {localStorage.getItem("accessToken") ? (
-          <Link to="/profile">Profile</Link>
-        ) : (
-          <>
-            <Link to="/login">Login</Link>
-          </>
-        )}
+      <MovieNab />
+      <div className="text-center mt-2">
+        <Container>
+          <Form.Group className="mb-3">
+            <Form.Control
+              type="text"
+              placeholder="Search Movie"
+              onChange={(e) => setSearchMovieText(e.target.value)}
+              value={searchMovieText}
+            />
+          </Form.Group>
+          <div>
+            <span style={{ color: "red" }}>{searchErrorText}</span>
+          </div>
+        </Container>
       </div>
-      <div>
-        <input
-          type="text"
-          value={searchMovieText}
-          placeholder="Search Movie"
-          onChange={(e) => setSearchMovieText(e.target.value)}
-        />
-        <span style={{ color: "red" }}>{searchErrorText}</span>
-      </div>
-      Suggested Movies:
+
       <br />
       {isError ? (
         <>
@@ -101,34 +101,29 @@ const Index = () => {
           <div
             style={{ background: "#e7e7e7", padding: "10px", margin: "10px" }}
           >
-            <div>{loading ? <>Loading.....</> : <></>}</div>
+            <div>
+              {loading ? (
+                <>
+                  <Container className="text-center">
+                    <Spinner animation="border" role="status">
+                      <span className="visually-hidden">Loading...</span>
+                    </Spinner>
+                  </Container>
+                </>
+              ) : (
+                <></>
+              )}
+            </div>
             {!loading && movies.length < 1 ? (
               <>No Movies found</>
             ) : (
               <>
                 {" "}
-                {movies.map((el) => (
-                  <>
-                    <div key={el.id}>
-                      <Link to={`/view/${el.id}`}>
-                        <span style={{ fontWeight: "bold" }}>{el.name}</span>
-                      </Link>
-                      <br />
-                      <img
-                        src={el.image}
-                        alt="Movie image"
-                        style={{ height: "100px" }}
-                      />
-                      <br />
-                      Info:{el.info}
-                      <br />
-                      Rating: {el.rating}
-                      <br />
-                      <br />
-                      <br />
-                    </div>
-                  </>
-                ))}
+                <Row>
+                  {movies.map((el) => (
+                    <SingleMovie data={el} />
+                  ))}
+                </Row>
               </>
             )}
           </div>
